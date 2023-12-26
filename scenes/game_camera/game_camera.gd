@@ -21,12 +21,7 @@ func _process(delta):
 func calculate_global_position(player: Node2D, delta: float) -> Vector2:
 	# lerp is the point that is the given % away from 2 points
 	# if A is at 10, and B is at 0, Point where lerp is 50% is 5.
-	# We are trying to move a smooth percentage from the cameras current position to
-	# the players current position
-	
-	# "1.0 - exp(-delta * smoothing_value)" is a formula that gives you a natural
-	# feeling percentage for camera smoothing to use when lerping between 2 points.
-	return global_position.lerp(player.global_position, 1.0 - exp(-delta * 10))
+	return Utils.smoothe_lerp(global_position, player.global_position, delta, 10)
 
 
 # Gets the player node
