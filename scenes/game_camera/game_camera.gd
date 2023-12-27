@@ -9,7 +9,7 @@ func _ready():
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta):
-	var player = get_player_node()
+	var player = Utils.get_player_node(self)
 	
 	if (player == null):
 		return
@@ -23,17 +23,3 @@ func calculate_global_position(player: Node2D, delta: float) -> Vector2:
 	# if A is at 10, and B is at 0, Point where lerp is 50% is 5.
 	return Utils.smoothe_lerp(global_position, player.global_position, delta, 10)
 
-
-# Gets the player node
-func get_player_node() -> Node2D:
-	# "player" is a group created in the player scene that contains
-	# the root player node.
-	# The function get_nodes_in_group returns an array.
-	# Since our player root node should be the only node in the player group,
-	# we can return null if there's more than one
-	var player_nodes = get_tree().get_nodes_in_group("player")
-	
-	if (player_nodes.size() != 1):
-		return null
-	
-	return player_nodes[0]
