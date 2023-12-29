@@ -10,7 +10,7 @@ func _ready():
 
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
-func _process(delta):
+func _process(_delta):
 	# Moves toward the player every frame
 	var direction = get_direction_to_player()
 	velocity = direction * MAX_SPEED
@@ -28,5 +28,5 @@ func get_direction_to_player() -> Vector2:
 
 
 # Takes damage when another area2D enters this area
-func on_area_entered(other_area: Area2D):
+func on_area_entered(_other_area: Area2D):
 	queue_free()

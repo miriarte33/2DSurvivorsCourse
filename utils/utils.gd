@@ -29,7 +29,7 @@ static func distance_between(a: Vector2, b: Vector2) -> float:
 static func get_distance_sorted_enemies(node: Node, max_range: int) -> Array[Node]:
 	var player = get_player_node(node)
 	if player == null:
-		[]
+		return []
 
 	var enemies = node.get_tree().get_nodes_in_group("enemies")
 	var within_max_range = func(enemy: Node2D): 
