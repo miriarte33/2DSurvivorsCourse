@@ -1,6 +1,7 @@
 extends CharacterBody2D
 
-const MAX_SPEED = 200
+const MAX_SPEED = 125
+const ACCELERATION_SMOOTHING = 25
 
 
 # Called when the node enters the scene tree for the first time.
@@ -9,16 +10,11 @@ func _ready():
 
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
-func _process(_delta):
-	# velocity is a property of CharacterBody2D. F1 opens up the documentation in-engine
-	# this will send us at 200 pixels/second in the direction pressed
-	velocity = get_movement_velocity()
+func _process(delta):
+	var direction = get_direction()
+	var target_velocity = direction * MAX_SPEED
+	velocity = Utils.smoothe_lerp(velocity, target_velocity, delta, ACCELERATION_SMOOTHING)
 	move_and_slide()
-
-
-# Gets the desired movement velocity from the direction the player is pressing
-func get_movement_velocity():
-	return get_direction() * MAX_SPEED
 
 
 # Returns a vector representing the direction the player wants to move

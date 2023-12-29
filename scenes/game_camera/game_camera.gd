@@ -21,4 +21,4 @@ func _process(delta):
 func calculate_global_position(player: Node2D, delta: float) -> Vector2:
 	# lerp is the point that is the given % away from 2 points
 	# if A is at 10, and B is at 0, Point where lerp is 50% is 5.
-	return Utils.smoothe_lerp(global_position, player.global_position, delta, 10)
+	return Utils.smoothe_lerp(global_position, player.global_position, delta, 20)
