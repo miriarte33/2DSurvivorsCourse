@@ -5,6 +5,7 @@ const MAX_RANGE = 150
 
 # Export the sword ability scene to be able to spawn it at run time.
 @export var sword_ability: PackedScene
+var damage = 5
 
 
 # Called when the node enters the scene tree for the first time.
@@ -25,11 +26,12 @@ func on_timer_timeout():
 	if enemies.size() == 0:
 		return
 
-	var sword_instance = sword_ability.instantiate() as Node2D
+	var sword_instance = sword_ability.instantiate() as SwordAbility
 
 	# this line adds the sword instance to the main scene which is the parent of player
 	player.get_parent().add_child(sword_instance)
 	var nearest_enemy = enemies[0] as Node2D
+	sword_instance.hitbox.set_damage(damage)
 	sword_instance.set_global_position(nearest_enemy.global_position)
 
 	# TEMP: Randomize this rotation for now
