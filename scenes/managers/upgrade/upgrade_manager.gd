@@ -6,6 +6,9 @@ extends Node
 # Needed to connect to the level up signal
 @export var experience_manager: ExperienceManager
 
+# Used to show upgrade screen on level up
+@export var upgrade_screen_scene: PackedScene
+
 # Dictionary containing the current upgrades the player has
 var current_upgrades = {}
 
@@ -19,9 +22,16 @@ func on_level_up(_current_level: int):
 	if chosen_upgrade == null:
 		return
 
+	var upgrade_screen_instance = upgrade_screen_scene.instantiate()
+	add_child(upgrade_screen_instance)
+	upgrade_screen_instance.set_ability_upgrades([chosen_upgrade] as Array[AbilityUpgrade])
+	#apply_upgrade(chosen_upgrade)
+
+
+func apply_upgrade(upgrade: AbilityUpgrade):
 	# Add to current upgrades dictionary, or update if already there
-	var has_upgrade = current_upgrades.has(chosen_upgrade.id)
+	var has_upgrade = current_upgrades.has(upgrade.id)
 	if !has_upgrade:
-		current_upgrades[chosen_upgrade.id] = {"resource": chosen_upgrade, "quantity": 1}
+		current_upgrades[upgrade.id] = {"resource": upgrade, "quantity": 1}
 	else:
-		current_upgrades[chosen_upgrade.id]["quantity"] += 1
+		current_upgrades[upgrade.id]["quantity"] += 1
