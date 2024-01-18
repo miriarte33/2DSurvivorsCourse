@@ -24,5 +24,6 @@ func spawn_enemy():
 	var spawn_position = player.global_position + (random_direction * SPAWN_RADIUS)
 
 	var enemy_instance = basic_enemy_scene.instantiate() as Node2D
-	get_parent().add_child(enemy_instance)
+
+	Utils.spawn_in_entities_layer(self, enemy_instance)
 	enemy_instance.set_global_position(spawn_position)

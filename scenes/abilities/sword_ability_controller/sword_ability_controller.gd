@@ -32,8 +32,7 @@ func on_timer_timeout():
 
 	var sword_instance = sword_ability.instantiate() as SwordAbility
 
-	# this line adds the sword instance to the main scene which is the parent of player
-	player.get_parent().add_child(sword_instance)
+	Utils.spawn_in_foreground_layer(self, sword_instance)
 	var nearest_enemy = enemies[0] as Node2D
 	sword_instance.hitbox.set_damage(damage)
 	sword_instance.set_global_position(nearest_enemy.global_position)

@@ -25,5 +25,5 @@ func on_died():
 		return
 
 	var vial_instance = vial_scene.instantiate() as Node2D
-	owner.get_parent().add_child(vial_instance)
+	Utils.spawn_in_entities_layer(self, vial_instance)
 	vial_instance.set_global_position(owner.global_position)

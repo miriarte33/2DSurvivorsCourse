@@ -48,3 +48,14 @@ static func get_distance_sorted_enemies(node: Node, max_range: int) -> Array[Nod
 
 	filteredEnemies.sort_custom(sort_by_distance)
 	return filteredEnemies
+
+
+# Spawns something in the entities layer
+static func spawn_in_entities_layer(node: Node, node_to_spawn: Node2D):
+	var entities_layer = node.get_tree().get_first_node_in_group("entities_layer")
+	entities_layer.add_child(node_to_spawn)
+	
+# Spawns something in the foreground layer
+static func spawn_in_foreground_layer(node: Node, node_to_spawn: Node2D):
+	var foreground_layer = node.get_tree().get_first_node_in_group("foreground_layer")
+	foreground_layer.add_child(node_to_spawn)
