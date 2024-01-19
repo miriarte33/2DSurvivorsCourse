@@ -3,6 +3,16 @@ extends CharacterBody2D
 const MAX_SPEED = 125
 const ACCELERATION_SMOOTHING = 25
 
+@onready var damage_interval_timer = $DamageIntervalTimer as Timer
+
+var number_colliding_bodies = 0
+
+
+func _ready():
+	$CollisionArea.body_entered.connect(on_body_entered)
+	$CollisionArea.body_exited.connect(on_body_exited)
+	damage_interval_timer.timeout.connect(on_damage_interval_timer_timeout)
+
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta):
@@ -28,3 +38,27 @@ func get_direction():
 
 	# return the normalized input state of x and y
 	return Vector2(x_movement, y_movement).normalized()
+
+
+# Deals damage to the player if the damage timer is still running
+# and if there are any number of colliding bodies
+func maybe_deal_damage():
+	if number_colliding_bodies == 0 || !damage_interval_timer.is_stopped():
+		return
+
+	var healthComponent = $HealthComponent as HealthComponent
+	healthComponent.damage(1)
+	damage_interval_timer.start()
+
+
+func on_body_entered(other_body: Node2D):
+	number_colliding_bodies += 1
+	maybe_deal_damage()
+
+
+func on_body_exited(other_body: Node2D):
+	number_colliding_bodies -= 1
+
+
+func on_damage_interval_timer_timeout():
+	maybe_deal_damage()

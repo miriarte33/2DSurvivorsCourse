@@ -6,6 +6,8 @@ const MAX_RANGE = 150
 # Export the sword ability scene to be able to spawn it at run time.
 @export var sword_ability: PackedScene
 
+@onready var timer = $Timer as Timer
+
 var damage = 5
 var base_wait_time
 
@@ -14,7 +16,6 @@ var base_wait_time
 func _ready():
 	# Subscribe to the Timer timeout signal so that we can spawn
 	# a sword when the timer runs out.
-	var timer = get_node("Timer") as Timer
 	timer.timeout.connect(on_timer_timeout)
 	base_wait_time = timer.wait_time
 	GameEvents.ability_upgrade_added.connect(on_ability_upgrade_added)
@@ -53,7 +54,6 @@ func on_ability_upgrade_added(upgrade: AbilityUpgrade, current_upgrades: Diction
 
 	# We reduce the spawn time by 10% for each sword rate upgrade we have
 	var percent_reduction = current_upgrades["sword_rate"]["quantity"] * .1
-	$Timer.wait_time = base_wait_time * (1 - percent_reduction)
+	timer.wait_time = base_wait_time * (1 - percent_reduction)
 	# Must start the timer again after the wait_time changes
-	$Timer.start()
-	print($Timer.wait_time)
+	timer.start()
