@@ -1,9 +1,20 @@
-[gd_scene load_steps=8 format=3 uid="uid://chshq5wubstnh"]
+[gd_scene load_steps=10 format=3 uid="uid://chshq5wubstnh"]
 
 [ext_resource type="Script" path="res://scenes/game_object/player/player.gd" id="1_3bfj2"]
 [ext_resource type="Texture2D" uid="uid://c87wt7qlesx8w" path="res://scenes/game_object/player/player.png" id="1_r1isf"]
 [ext_resource type="PackedScene" uid="uid://5b4aujoq1fdd" path="res://scenes/component/health/health_component.tscn" id="2_fslr4"]
 [ext_resource type="PackedScene" uid="uid://plwng4vtymcp" path="res://scenes/abilities/sword_ability_controller/sword_ability_controller.tscn" id="2_pq6bo"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_0cuu1"]
+bg_color = Color(0.247059, 0.14902, 0.192157, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_fu5eu"]
+bg_color = Color(0.262745, 0.882353, 0.701961, 1)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0.247059, 0.14902, 0.192157, 1)
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_ol742"]
 radius = 32.0
@@ -28,6 +39,19 @@ script = ExtResource("1_3bfj2")
 [node name="DamageIntervalTimer" type="Timer" parent="."]
 wait_time = 0.5
 one_shot = true
+
+[node name="HealthBar" type="ProgressBar" parent="."]
+custom_minimum_size = Vector2(26, 6)
+offset_left = -13.0
+offset_top = -24.0
+offset_right = 13.0
+offset_bottom = -18.0
+pivot_offset = Vector2(13, 3)
+theme_override_styles/background = SubResource("StyleBoxFlat_0cuu1")
+theme_override_styles/fill = SubResource("StyleBoxFlat_fu5eu")
+max_value = 1.0
+value = 0.5
+show_percentage = false
 
 [node name="PickupArea" type="Area2D" parent="."]
 collision_layer = 16
