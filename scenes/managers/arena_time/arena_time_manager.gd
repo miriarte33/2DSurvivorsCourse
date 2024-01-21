@@ -1,6 +1,6 @@
 extends Node
 
-@export var victory_screen_scene: PackedScene
+@export var end_screen_scene: PackedScene
 
 # Assigns a node to a variable only when the node becomes ready
 @onready var timer: Timer = $Timer
@@ -15,4 +15,4 @@ func get_time_elapsed():
 
 
 func on_timer_timeout():
-	Utils.spawn_as_child(self, victory_screen_scene.instantiate())
+	Utils.spawn_as_child(self, end_screen_scene.instantiate())
