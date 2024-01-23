@@ -1,6 +1,11 @@
 extends Node
 
 @export var basic_enemy_scene: PackedScene
+@export var arena_time_manager: ArenaTimeManager
+
+@onready var timer: Timer = $Timer
+
+var base_spawn_time = 0
 
 # This is our spawn radius because our window with is 640px
 # so we want the radius to be a little bit more than half.
@@ -9,8 +14,9 @@ const SPAWN_RADIUS = 375
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
-	# short hand for get_node("Timer")
-	$Timer.timeout.connect(spawn_enemy)
+	base_spawn_time = timer.wait_time
+	timer.timeout.connect(on_timer_timeout)
+	arena_time_manager.arena_difficulty_increased.connect(on_arena_difficulty_increased)
 
 
 func spawn_enemy():
@@ -27,3 +33,18 @@ func spawn_enemy():
 
 	Utils.spawn_in_entities_layer(self, enemy_instance)
 	enemy_instance.set_global_position(spawn_position)
+
+
+func on_timer_timeout():
+	timer.start()
+	spawn_enemy()
+
+
+func on_arena_difficulty_increased(arena_difficulty: int):
+	# 5 seconds per difficulty increase, and there's 12 5 seconds intervals
+	# in a minute.
+	# We want to reduce the spawn_time by .1 every minute.
+	# The min ensures that the wait_time can only be a minimum
+	# of .3 since we are clamping the time off down to .7
+	var time_off = min((.1 / 12) * arena_difficulty, .7)
+	timer.wait_time = base_spawn_time - time_off
