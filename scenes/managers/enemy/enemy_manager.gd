@@ -19,19 +19,41 @@ func _ready():
 	arena_time_manager.arena_difficulty_increased.connect(on_arena_difficulty_increased)
 
 
+func get_spawn_position() -> Vector2:
+	var player = Utils.get_player_node(self)
+	if player == null:
+		return Vector2.ZERO
+
+	# Give me a vector thats rotated in radians anywhere of 0 -> 360 degrees
+	var random_direction = Vector2.RIGHT.rotated(randf_range(0, TAU))
+
+	# Spawn position is 330px in a random direction from the player
+	var spawn_position = player.global_position + (random_direction * SPAWN_RADIUS)
+
+	# Add a ray cast (line in which you check for collisions) to prevent invalid spawn points
+	# We are looking for collisions in the 1 mask
+	# You have to provide the bit value of the mask
+	var ray_query_parameters = PhysicsRayQueryParameters2D.create(
+		player.global_position, spawn_position, 1 << 0
+	)
+	var ray = get_tree().root.world_2d.direct_space_state.intersect_ray(ray_query_parameters)
+	if ray.is_empty():
+		# No collision in the desired spawn_position
+		return spawn_position
+	else:
+		# Theres a collision, get a new spawn_position
+		return get_spawn_position()
+
+
 func spawn_enemy():
 	var player = Utils.get_player_node(self)
 	if player == null:
 		return
 
-	# Give me a vector thats rotated in radians anywhere of 0 -> 360 degrees
-	var random_direction = Vector2.RIGHT.rotated(randf_range(0, TAU))
-	# Spawn position is 330px in a random direction from the player
-	var spawn_position = player.global_position + (random_direction * SPAWN_RADIUS)
-
 	var enemy_instance = basic_enemy_scene.instantiate() as Node2D
 
 	Utils.spawn_in_entities_layer(self, enemy_instance)
+	var spawn_position = get_spawn_position()
 	enemy_instance.set_global_position(spawn_position)
 
 
