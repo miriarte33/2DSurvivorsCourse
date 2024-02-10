@@ -24,6 +24,9 @@ func pick_upgrades():
 
 	# Loop for however many upgrades you want to present to the user
 	for i in 2:
+		if filtered_upgrades.is_empty():
+			break
+
 		var chosen_upgrade = filtered_upgrades.pick_random() as AbilityUpgrade
 		chosen_upgrades.append(chosen_upgrade)
 		# Return every upgrade that does not share the ID of the chosen upgrade
@@ -41,6 +44,15 @@ func apply_upgrade(upgrade: AbilityUpgrade):
 		current_upgrades[upgrade.id] = {"resource": upgrade, "quantity": 1}
 	else:
 		current_upgrades[upgrade.id]["quantity"] += 1
+
+	if upgrade.max_quantity > 0:
+		var current_quantity = current_upgrades[upgrade.id]["quantity"]
+		if current_quantity == upgrade.max_quantity:
+			# Only keep the upgrades that are not the upgrade that reached
+			# it's max quantity
+			upgrade_pool = upgrade_pool.filter(
+				func(pool_upgrade): return pool_upgrade.id != upgrade.id
+			)
 
 	GameEvents.emit_ability_upgrade_added(upgrade, current_upgrades)
 
